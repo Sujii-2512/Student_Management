@@ -51,45 +51,6 @@ cd student-enrollment
 
 The application will start at http://localhost:8080
 
-## API Endpoints
-
-### Authentication
-
-- POST `/api/auth/register` - Register a new student account
-
-### Admin Endpoints
-
-- GET `/api/admin/students` - Get all students
-- GET `/api/admin/students/{id}` - Get student by ID
-- POST `/api/admin/students` - Create a new student
-- PUT `/api/admin/students/{id}` - Update a student
-- DELETE `/api/admin/students/{id}` - Delete a student
-
-- GET `/api/admin/courses` - Get all courses
-- GET `/api/admin/courses/{id}` - Get course by ID
-- POST `/api/admin/courses` - Create a new course
-- PUT `/api/admin/courses/{id}` - Update a course
-- DELETE `/api/admin/courses/{id}` - Delete a course
-
-- GET `/api/admin/enrollments` - Get all enrollments
-- GET `/api/admin/enrollments/student/{studentId}` - Get enrollments by student ID
-- GET `/api/admin/enrollments/course/{courseId}` - Get enrollments by course ID
-- POST `/api/admin/enrollments` - Create a new enrollment
-- DELETE `/api/admin/enrollments/{id}` - Delete an enrollment
-
-### Student Endpoints
-
-- GET `/api/students/courses` - Get all available courses
-- GET `/api/students/courses/{id}` - Get course by ID
-- POST `/api/students/enroll` - Enroll in a course
-- GET `/api/students/enrollments` - Get student's enrollments
-
-## Testing with Postman
-
-1. Import the provided Postman collection
-2. Set up Basic Authentication in Postman with your credentials
-3. Test the API endpoints
-
 ## Default Admin Account
 
 - Email: admin@example.com
