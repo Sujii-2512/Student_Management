@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Course Enrollment System</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        .tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        .tab {
+            padding: 10px 15px;
+            cursor: pointer;
+            background: #ddd;
+            border: none;
+            outline: none;
+            margin-right: 5px;
+        }
+        .tab.active {
+            background: #4CAF50;
+            color: white;
+        }
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+        }
+        .tab-content.active {
+            display: block;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        textarea {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Student Course Enrollment System</h1>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="openTab(event, 'login')">Login</button>
+            <button class="tab" onclick="openTab(event, 'register')">Register</button>
+            <button class="tab" onclick="openTab(event, 'courses')">Courses</button>
+            <button class="tab" onclick="openTab(event, 'enrollments')">My Enrollments</button>
+        </div>
+        
+        <div id="login" class="tab-content active">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <div class="form-group">
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" required>
+                </div>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+        
+        <div id="register" class="tab-content">
+            <h2>Register</h2>
+            <form id="registerForm">
+                <div class="form-group">
+                    <label for="registerName">Name:</label>
+                    <input type="text" id="registerName" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerEmail">Email:</label>
+                    <input type="email" id="registerEmail" required>
+                </div>
+                <div class="form-group">
+                    <label for="registerPassword">Password:</label>
+                    <input type="password" id="registerPassword" required>
+                </div>
+                <button type="submit">Register</button>
+            </form>
+        </div>
+        
+        <div id="courses" class="tab-content">
+            <h2>Available Courses</h2>
+            <table id="coursesTable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Title</th>
+                        <th>Description</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Courses will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="enrollments" class="tab-content">
+            <h2>My Enrollments</h2>
+            <table id="enrollmentsTable">
+                <thead>
+                    <tr>
+                        <th>Course ID</th>
+                        <th>Course Title</th>
+                        <th>Enrolled At</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Enrollments will be loaded here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        function openTab(evt, tabName) {
+            const tabContents = document.getElementsByClassName("tab-content");
+            for (let i = 0; i < tabContents.length; i++) {
+                tabContents[i].classList.remove("active");
+            }
+            
+            const tabs = document.getElementsByClassName("tab");
+            for (let i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            
+            document.getElementById(tabName).classList.add("active");
+            evt.currentTarget.classList.add("active");
+        }
+
+        // Basic authentication credentials
+        let credentials = {
+            username: '',
+            password: ''
+        };
+        
+        // Event listeners for forms
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            // Save credentials for future API calls
+            credentials.username = email;
+            credentials.password = password;
+            
+            // In a real app, we would verify these credentials with the server
+            alert('Login successful! Now you can view courses and enrollments.');
+            
+            // Load courses after login
+            loadCourses();
+        });
+        
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            
+            // API call to register
+            fetch('/api/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    password: password
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Registration failed');
+            })
+            .then(data => {
+                alert('Registration successful! Please login.');
+                openTab({currentTarget: document.querySelector('.tab')}, 'login');
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        });
+        
+        // Function to load courses
+        function loadCourses() {
+            fetch('/api/students/courses', {
+                headers: {
+                    'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to load courses');
+            })
+            .then(courses => {
+                const tbody = document.querySelector('#coursesTable tbody');
+                tbody.innerHTML = '';
+                
+                courses.forEach(course => {
+                    const row = document.createElement('tr');
+                    
+                    const idCell = document.createElement('td');
+                    idCell.textContent = course.id;
+                    
+                    const titleCell = document.createElement('td');
+                    titleCell.textContent = course.title;
+                    
+                    const descCell = document.createElement('td');
+                    descCell.textContent = course.description;
+                    
+                    const actionCell = document.createElement('td');
+                    const enrollBtn = document.createElement('button');
+                    enrollBtn.textContent = 'Enroll';
+                    enrollBtn.onclick = function() {
+                        enrollInCourse(course.id);
+                    };
+                    actionCell.appendChild(enrollBtn);
+                    
+                    row.appendChild(idCell);
+                    row.appendChild(titleCell);
+                    row.appendChild(descCell);
+                    row.appendChild(actionCell);
+                    
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        }
+        
+        // Function to load enrollments
+        function loadEnrollments() {
+            fetch('/api/students/enrollments', {
+                headers: {
+                    'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+                }
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to load enrollments');
+            })
+            .then(enrollments => {
+                const tbody = document.querySelector('#enrollmentsTable tbody');
+                tbody.innerHTML = '';
+                
+                enrollments.forEach(enrollment => {
+                    const row = document.createElement('tr');
+                    
+                    const courseIdCell = document.createElement('td');
+                    courseIdCell.textContent = enrollment.courseId;
+                    
+                    const courseTitleCell = document.createElement('td');
+                    courseTitleCell.textContent = enrollment.courseTitle;
+                    
+                    const enrolledAtCell = document.createElement('td');
+                    enrolledAtCell.textContent = new Date(enrollment.enrolledAt).toLocaleString();
+                    
+                    row.appendChild(courseIdCell);
+                    row.appendChild(courseTitleCell);
+                    row.appendChild(enrolledAtCell);
+                    
+                    tbody.appendChild(row);
+                });
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        }
+        
+        // Function to enroll in a course
+        function enrollInCourse(courseId) {
+            fetch('/api/students/enroll', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Basic ' + btoa(credentials.username + ':' + credentials.password)
+                },
+                body: JSON.stringify({
+                    courseId: courseId,
+                    studentId: 1 // This should be the actual student ID
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error('Failed to enroll in course');
+            })
+            .then(data => {
+                alert('Successfully enrolled in course!');
+                loadEnrollments();
+            })
+            .catch(error => {
+                alert(error.message);
+            });
+        }
+    </script>
+</body>
+</html> 
