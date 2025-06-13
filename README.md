@@ -94,7 +94,3 @@ The application will start at http://localhost:8080
 
 - Email: admin@example.com
 - Password: admin
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details. 
